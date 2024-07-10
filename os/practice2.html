@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FIFO Page Replacement Algorithm Quiz</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #121212;
+            color: #ffffff;
+        }
+        .quiz-container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        .question {
+            margin: 20px 0;
+        }
+        .result {
+            margin: 20px 0;
+            padding: 10px;
+            border: 1px solid #333;
+            background-color: #2e2e2e;
+        }
+        input[type="radio"] {
+            margin-right: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #3a3a3a;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #555555;
+        }
+        /* Dark theme for the modal */
+        .modal-content {
+            background-color: #343a40; /* Dark gray */
+            color: white; /* White text color */
+        }
+
+        /* Customizing the modal header specifically if needed */
+        .modal-header {
+            border-bottom: 1px solid #474f55; /* Darker shade for the border */
+        }
+
+        /* Customizing the modal footer specifically if needed */
+        .modal-footer {
+            border-top: 1px solid #474f55; /* Darker shade for the border */
+        }
+
+        /* Ensure the close button is visible */
+        .modal-header .close {
+            color: white;
+            text-shadow: none; /* Remove text shadow if any */
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>FIFO Page Replacement Algorithm Quiz</h1>
+        <form id="quizForm">
+            <div class="question">
+                <p>1. What does FIFO stand for in the context of page replacement algorithms?</p>
+                <input type="radio" id="q1a" name="q1" value="a">
+                <label for="q1a">a) First In First Out</label><br>
+                <input type="radio" id="q1b" name="q1" value="b">
+                <label for="q1b">b) First In Fast Out</label><br>
+                <input type="radio" id="q1c" name="q1" value="c">
+                <label for="q1c">c) Fast In First Out</label><br>
+                <input type="radio" id="q1d" name="q1" value="d">
+                <label for="q1d">d) First Input First Output</label><br>
+            </div>
+            <div class="question">
+                <p>2. Which of the following is true about FIFO page replacement algorithm?</p>
+                <input type="radio" id="q2a" name="q2" value="a">
+                <label for="q2a">a) It replaces the page that was used the most recently.</label><br>
+                <input type="radio" id="q2b" name="q2" value="b">
+                <label for="q2b">b) It replaces the page that has been in memory the longest.</label><br>
+                <input type="radio" id="q2c" name="q2" value="c">
+                <label for="q2c">c) It replaces the page that has been in memory the shortest.</label><br>
+                <input type="radio" id="q2d" name="q2" value="d">
+                <label for="q2d">d) It replaces the page that will be used the least in the future.</label><br>
+            </div>
+            <div class="question">
+                <p>3. What is a disadvantage of the FIFO page replacement algorithm?</p>
+                <input type="radio" id="q3a" name="q3" value="a">
+                <label for="q3a">a) It is difficult to implement.</label><br>
+                <input type="radio" id="q3b" name="q3" value="b">
+                <label for="q3b">b) It requires complex hardware support.</label><br>
+                <input type="radio" id="q3c" name="q3" value="c">
+                <label for="q3c">c) It can lead to Belady's anomaly.</label><br>
+                <input type="radio" id="q3d" name="q3" value="d">
+                <label for="q3d">d) It always leads to the highest number of page faults.</label><br>
+            </div>
+            <div class="question">
+                <p>4. What is Belady's anomaly in the context of FIFO page replacement algorithm?</p>
+                <input type="radio" id="q4a" name="q4" value="a">
+                <label for="q4a">a) Adding more frames can sometimes increase the number of page faults.</label><br>
+                <input type="radio" id="q4b" name="q4" value="b">
+                <label for="q4b">b) Adding more frames always decreases the number of page faults.</label><br>
+                <input type="radio" id="q4c" name="q4" value="c">
+                <label for="q4c">c) Adding more frames has no effect on the number of page faults.</label><br>
+                <input type="radio" id="q4d" name="q4" value="d">
+                <label for="q4d">d) Adding more frames makes the algorithm faster.</label><br>
+            </div>
+            <div class="question">
+                <p>5. Given the reference string: 1, 2, 5, 6, 3, 1, 2, 4, and assuming 3 page slots, how many page faults will occur using the FIFO page replacement algorithm?</p>
+                <input type="radio" id="q5a" name="q5" value="a">
+                <label for="q5a">a) 4</label><br>
+                <input type="radio" id="q5b" name="q5" value="b">
+                <label for="q5b">b) 5</label><br>
+                <input type="radio" id="q5c" name="q5" value="c">
+                <label for="q5c">c) 6</label><br>
+                <input type="radio" id="q5d" name="q5" value="d">
+                <label for="q5d">d) 8</label><br>
+            </div>
+            <button type="button" onclick="submitQuiz()">Submit</button>
+        </form>
+        <div id="result" class="result"></div>
+    </div>
+
+    <!-- Bootstrap Modal -->
+    <div class="modal fade" id="congratsModal" tabindex="-1" aria-labelledby="congratsModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="congratsModalLabel">Congratulations!</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    You answered all the questions correctly. Well done!
+                    <br>
+                    <span style="color: yellow;">You had completed the Lecture: First In First Out (FIFO) Page Replacement Algorithm.</span>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="proceed()">Back to Home</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Explanation Modal -->
+    <div class="modal fade" id="explanationModal" tabindex="-1" aria-labelledby="explanationModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="explanationModalLabel">Incorrect Answers</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="explanationText">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert Modal -->
+    <div class="modal fade" id="alertModal" tabindex="-1" aria-labelledby="alertModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="alertModalLabel">Incomplete</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Please answer all questions before submitting the quiz.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function submitQuiz() {
+            var correctAnswers = {
+                q1: 'a',
+                q2: 'b',
+                q3: 'c',
+                q4: 'a',
+                q5: 'd'
+            };
+
+            var explanations = {
+                q1: "FIFO stands for First In First Out.",
+                q2: "FIFO replaces the page that has been in memory the longest.",
+                q3: "A disadvantage of the FIFO algorithm is that it can lead to Belady's anomaly.",
+                q4: "Belady's anomaly is the phenomenon where adding more frames can sometimes increase the number of page faults.",
+                q5: "With the reference string 1, 2, 5, 6, 3, 1, 2, 4 and 3 page slots, the number of page faults will be 8 using the FIFO page replacement algorithm."
+            };
+
+            var form = document.getElementById('quizForm');
+            var resultDiv = document.getElementById('result');
+            var score = 0;
+            var totalQuestions = Object.keys(correctAnswers).length;
+            var wrongAnswers = [];
+            var unansweredQuestions = [];
+
+            for (var question in correctAnswers) {
+                var answered = false;
+                var radios = form.elements[question];
+                for (var i = 0; i < radios.length; i++) {
+                    if (radios[i].checked) {
+                        answered = true;
+                        if (radios[i].value === correctAnswers[question]) {
+                            score++;
+                        } else {
+                            wrongAnswers.push(question);
+                        }
+                    }
+                }
+                if (!answered) {
+                    unansweredQuestions.push(question);
+                }
+            }
+
+            if (unansweredQuestions.length > 0) {
+                $('#alertModal').modal('show');
+            } else if (score === totalQuestions) {
+                $('#congratsModal').modal('show');
+            } else {
+                var explanationText = "";
+                wrongAnswers.forEach(function(question) {
+                    explanationText += "<p><strong>Question " + question.slice(1) + ":</strong> " + explanations[question] + "</p>";
+                });
+                document.getElementById('explanationText').innerHTML = explanationText;
+                $('#explanationModal').modal('show');
+            }
+
+            var resultText = "You got " + score + " out of " + totalQuestions + " correct.";
+            resultDiv.innerHTML = resultText;
+        }
+
+        function proceed() {
+            window.location.href = "index.html";
+        }
+    </script>
+</body>
+</html>
