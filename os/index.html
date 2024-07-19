@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Topic 4 FIFO Algorithm</title>
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <link rel="stylesheet" href="assets/css/index.css">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Roboto:wght@500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<video autoplay muted loop class="bg-video">
+  <source src="assets/media/background.mp4" type="video/mp4">
+  <track src="" kind="subtitles" srclang="en" label="English">
+  <track src="" kind="description" srclang="en" label="English">
+  Your browser does not support HTML5 video.
+</video>
+
+<div class="blur-glass"></div>
+
+<div class="content">
+  <div class="page-title">
+    <h1>Topic 4</h1>
+    <h2>First In First Out (FIFO)</h2>
+    <h3>Page Replacement Algorithm</h3>
+  </div>
+  <br><br>
+  <button class="start-learning-btn" onclick="window.location.href='lesson1.html'">Start Learning</button>
+  <button class="start-game-btn" onclick="window.location.href='game.html'">Start Game</button>
+</div>
+<button id="showPopUpBtn">
+  Download<br>FIFO Bus Simulator Game<br>
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
+    <path d="M.5 9.9a.5.5 0 0 1 .5-.5h4.5V1h6v8.4h4.5a.5.5 0 0 1 .354.854l-7.5 7.5a.5.5 0 0 1-.708 0l-7.5-7.5A.5.5 0 0 1 .5 9.9zM16 15.5a.5.5 0 0 1-.5.5h-15a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 .5-.5h15a.5.5 0 0 1 .5.5v2z"/>
+  </svg>
+</button>
+<div class="pop-up-overlay" id="popUpOverlay">
+  <div class="pop-up">
+    <h3 style="color: black;">FIFO Bus Simulator (Win/Mac)</h5>
+    <img src="assets/img/game.png" alt="Game Introduction">
+    <p style="font-weight: bold;">
+      Try Out Our Visual Novel Game Now!<br>
+      You will have a better visual learning<br>
+      about FIFO algorithm!
+    </p>
+    <button class="download-btn" id="download-btn" >Download Now</button>
+    <button class="close-btn" onclick="closePopUp()">Close</button>
+  </div>
+</div>
+<script>
+  document.getElementById('showPopUpBtn').onclick = showPopUp;
+
+  document.getElementById('download-btn').addEventListener('click', function() {
+    window.open('https://github.com/ycstation/ycstation.github.io/releases/tag/v1.2', '_blank');
+  });
+
+  function showPopUp() {
+    document.getElementById('popUpOverlay').style.display = 'flex';
+  }
+  function closePopUp() {
+    document.getElementById('popUpOverlay').style.display = 'none';
+  }
+  window.onload = showPopUp;
+</script>
+</body>
+</html>

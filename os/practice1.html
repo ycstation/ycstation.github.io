@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Replacement Algorithms Quiz</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #121212;
+            color: #ffffff;
+        }
+        .quiz-container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        .question {
+            margin: 20px 0;
+        }
+        .result {
+            margin: 20px 0;
+            padding: 10px;
+            border: 1px solid #333;
+            background-color: #2e2e2e;
+        }
+        input[type="radio"] {
+            margin-right: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #3a3a3a;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #555555;
+        }
+        /* Dark theme for the modal */
+        .modal-content {
+            background-color: #343a40; /* Dark gray */
+            color: white; /* White text color */
+        }
+
+        /* Customizing the modal header specifically if needed */
+        .modal-header {
+            border-bottom: 1px solid #474f55; /* Darker shade for the border */
+        }
+
+        /* Customizing the modal footer specifically if needed */
+        .modal-footer {
+            border-top: 1px solid #474f55; /* Darker shade for the border */
+        }
+
+        /* Ensure the close button is visible */
+        .modal-header .close {
+            color: white;
+            text-shadow: none; /* Remove text shadow if any */
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>Page Replacement Algorithms Quiz</h1>
+        <form id="quizForm">
+            <div class="question">
+                <p>1. What is the primary purpose of a page replacement algorithm in a computer operating system?</p>
+                <input type="radio" id="q1a" name="q1" value="a">
+                <label for="q1a">a) To determine which pages to remove from physical memory when new pages are needed.</label><br>
+                <input type="radio" id="q1b" name="q1" value="b">
+                <label for="q1b">b) To increase the size of the virtual memory.</label><br>
+                <input type="radio" id="q1c" name="q1" value="c">
+                <label for="q1c">c) To allocate more CPU time to running processes.</label><br>
+                <input type="radio" id="q1d" name="q1" value="d">
+                <label for="q1d">d) To manage the CPU scheduling of tasks.</label><br>
+            </div>
+            <div class="question">
+                <p>2. Which one of the following is not a page replacement algorithm?</p>
+                <input type="radio" id="q2a" name="q2" value="a">
+                <label for="q2a">a) Least Recently Used (LRU)</label><br>
+                <input type="radio" id="q2b" name="q2" value="b">
+                <label for="q2b">b) First In First Out (FIFO)</label><br>
+                <input type="radio" id="q2c" name="q2" value="c">
+                <label for="q2c">c) Round Robin</label><br>
+                <input type="radio" id="q2d" name="q2" value="d">
+                <label for="q2d">d) Optimal</label><br>
+            </div>
+            <button type="button" onclick="submitQuiz()">Submit</button>
+        </form>
+        <div id="result" class="result"></div>
+    </div>
+
+    <!-- Bootstrap Modal -->
+    <div class="modal fade" id="congratsModal" tabindex="-1" aria-labelledby="congratsModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="congratsModalLabel">Congratulations!</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    You answered all the questions correctly. Well done!
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="proceed()">Proceed</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Explanation Modal -->
+    <div class="modal fade" id="explanationModal" tabindex="-1" aria-labelledby="explanationModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="explanationModalLabel">Incorrect Answers</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="explanationText">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert Modal -->
+    <div class="modal fade" id="alertModal" tabindex="-1" aria-labelledby="alertModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="alertModalLabel">Incomplete</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Please answer all questions before submitting the quiz.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function submitQuiz() {
+            var correctAnswers = {
+                q1: 'a',
+                q2: 'c'
+            };
+
+            var explanations = {
+                q1: "The primary purpose of a page replacement algorithm is to determine which pages to remove from physical memory when new pages are needed.",
+                q2: "Round Robin is a CPU scheduling algorithm, not a page replacement algorithm."
+            };
+
+            var form = document.getElementById('quizForm');
+            var resultDiv = document.getElementById('result');
+            var score = 0;
+            var totalQuestions = Object.keys(correctAnswers).length;
+            var wrongAnswers = [];
+            var unansweredQuestions = [];
+
+            for (var question in correctAnswers) {
+                var answered = false;
+                var radios = form.elements[question];
+                for (var i = 0; i < radios.length; i++) {
+                    if (radios[i].checked) {
+                        answered = true;
+                        if (radios[i].value === correctAnswers[question]) {
+                            score++;
+                        } else {
+                            wrongAnswers.push(question);
+                        }
+                    }
+                }
+                if (!answered) {
+                    unansweredQuestions.push(question);
+                }
+            }
+
+            if (unansweredQuestions.length > 0) {
+                $('#alertModal').modal('show');
+            } else if (score === totalQuestions) {
+                $('#congratsModal').modal('show');
+            } else {
+                var explanationText = "";
+                wrongAnswers.forEach(function(question) {
+                    explanationText += "<p><strong>Question " + question.slice(1) + ":</strong> " + explanations[question] + "</p>";
+                });
+                document.getElementById('explanationText').innerHTML = explanationText;
+                $('#explanationModal').modal('show');
+            }
+
+            var resultText = "You got " + score + " out of " + totalQuestions + " correct.";
+            resultDiv.innerHTML = resultText;
+        }
+
+        function proceed() {
+            window.location.href = "lesson2.html";
+        }
+    </script>
+</body>
+</html>
