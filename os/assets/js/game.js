@@ -1,3 +1,36 @@
+document.addEventListener('DOMContentLoaded', function () {
+    const gameContainer = document.getElementById('gameContainer');
+    setupUI(gameContainer);
+
+    const modal = document.getElementById("rulesModal");
+    const span = document.getElementsByClassName("close-btn")[0];
+    const rulesBtn = document.getElementById("rulesBtn");
+
+    openModal();
+
+    rulesBtn.onclick = function() {
+        openModal();
+    }
+
+    span.onclick = function() {
+        closeModal();
+    }
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            closeModal();
+        }
+    }
+});
+
+function openModal() {
+    document.getElementById("rulesModal").style.display = "block";
+}
+
+function closeModal() {
+    document.getElementById("rulesModal").style.display = "none";
+}
+
 let memorySlots = new Array(3).fill(null);
 let pageRequests = generateRandomPageRequests(12, 5);
 let pageFaults = 0;
@@ -5,29 +38,23 @@ let slotElements = [];
 let requestElements = [];
 let pageFaultText;
 let nextPageIndex = 0;
-let nextFrameIndex = 0;  // Track the next frame to be filled in sequence
+let nextFrameIndex = 0;  
 
 function generateRandomPageRequests(length, maxPageNumber) {
     let requests = [];
-    let lastNumber = null;  // Track the last number added to the list
+    let lastNumber = null; 
 
     for (let i = 0; i < length; i++) {
         let newPage;
         do {
             newPage = Math.floor(Math.random() * maxPageNumber) + 1;
-        } while (newPage === lastNumber);  // Ensure the new page is not the same as the last one
+        } while (newPage === lastNumber); 
 
         requests.push(newPage);
-        lastNumber = newPage;  // Update the last number to the new page
+        lastNumber = newPage;  
     }
     return requests;
 }
-
-
-document.addEventListener('DOMContentLoaded', function () {
-    const gameContainer = document.getElementById('gameContainer');
-    setupUI(gameContainer);
-});
 
 function setupUI(container) {
     container.innerHTML = `
@@ -104,38 +131,37 @@ function dropHandler(event, slotIndex) {
         return;
     }
 
-    // Prevent placing a page if it's already present in any frame
+
     if (memorySlots.includes(page)) {
         alert('Page ' + page + ' is already in memory! Drag it to the discard pile if you want to remove it.');
         return;
     }
 
-    // Enforce strict filling order when not all frames are filled
+
     if (memorySlots.filter(slot => slot !== null).length < 3) {
         if (slotIndex !== memorySlots.filter(slot => slot !== null).length) {
             alert(`Please place the page in Frame ${memorySlots.filter(slot => slot !== null).length + 1} first.`);
             return;
         }
-        // Placing a page in an empty frame for the first time
+
         memorySlots[slotIndex] = page;
         slotElements[slotIndex].textContent = page;
-        pageFaults++; // Increment page faults as the frame is filled for the first time
-    } else { // All frames are filled, apply FIFO
+        pageFaults++; 
+    } else { 
         if (slotIndex !== nextFrameIndex) {
             alert('Please replace the page in the oldest frame (' + (nextFrameIndex + 1) + ').');
             return;
         }
 
-        // Replace the oldest page as per FIFO rules and increment the page fault count
         memorySlots[nextFrameIndex] = page;
         slotElements[nextFrameIndex].textContent = page;
         nextFrameIndex = (nextFrameIndex + 1) % 3;
-        pageFaults++; // Increment page faults for replacing a page
+        pageFaults++; 
     }
 
-    pageFaultText.textContent = 'Page Faults: ' + pageFaults; // Update the page fault count display
-    requestElements[index].remove(); // Remove the page from the queue
-    nextPageIndex = findNextPageIndex(); // Update to the next valid index
+    pageFaultText.textContent = 'Page Faults: ' + pageFaults;
+    requestElements[index].remove(); 
+    nextPageIndex = findNextPageIndex(); 
 }
 
 function findNextPageIndex() {
@@ -144,33 +170,30 @@ function findNextPageIndex() {
             return i;
         }
     }
-    return 0; // Reset to start or handle according to your needs
+    return 0;
 }
-
-
-
 
 function discardDropHandler(event) {
     event.preventDefault();
     let page = event.dataTransfer.getData("text/plain");
     let index = parseInt(event.dataTransfer.getData("index"), 10);
 
-    // Determine where the drag started (either from frames or queue)
+
     let dragSource = requestElements[index].parentNode.getAttribute('id');
 
     if (dragSource === 'queue') {
-        // Attempting to discard from the queue
-        if (memorySlots.includes(page)) { // Check if the page is in any frame
-            // Count how many times this page appears in the frames
+
+        if (memorySlots.includes(page)) { 
+
             let countInFrames = memorySlots.reduce((acc, curr) => acc + (curr === page ? 1 : 0), 0);
-            // Count how many times this page appears in the queue
+
             let countInQueue = Array.from(document.querySelectorAll('.queue-container .box')).reduce((acc, curr) => acc + (curr.textContent.includes(`Page ${page}`) ? 1 : 0), 0);
 
-            if (countInFrames + countInQueue > 1) { // Only allow discard if there are duplicates across frames and queue
-                requestElements[index].remove(); // Remove the UI element
-                // Correctly adjust nextPageIndex if necessary
+            if (countInFrames + countInQueue > 1) { 
+                requestElements[index].remove(); 
+                
                 if (index === nextPageIndex) {
-                    nextPageIndex = findNextPageIndex(); // Find the next valid index
+                    nextPageIndex = findNextPageIndex();
                 }
             } else {
                 alert('This page is not a duplicate or is needed in memory!');
@@ -179,14 +202,14 @@ function discardDropHandler(event) {
             alert('This page cannot be discarded as it is not in memory!');
         }
     } else if (dragSource === 'frames') {
-        // Discarding directly from the frames
+
         if (memorySlots.indexOf(page) !== -1) {
-            memorySlots[memorySlots.indexOf(page)] = null; // Remove the page from the frame
-            updateMemorySlots(); // Update the display of frames
-            requestElements[index].remove(); // Remove the UI element
-            // Adjust nextPageIndex if necessary
+            memorySlots[memorySlots.indexOf(page)] = null; 
+            updateMemorySlots(); 
+            requestElements[index].remove(); 
+
             if (index === nextPageIndex) {
-                nextPageIndex = findNextPageIndex(); // Find the next valid index
+                nextPageIndex = findNextPageIndex(); 
             }
         } else {
             alert('This page cannot be discarded as it is not in memory!');
@@ -195,9 +218,6 @@ function discardDropHandler(event) {
         alert('Invalid discard action!');
     }
 }
-
-
-
 
 function updateMemorySlots() {
     for (let i = 0; i < 3; i++) {
